@@ -18,6 +18,7 @@
 <div class="table-responsive px-1">
   <div class="d-flex justify-content-between align-items-center mb-5 mt-2">
     <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1">Tambah Peminjaman</a>
+    @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
       <div class="btn-toolbar">
         <div class="btn-group me-2">
@@ -26,6 +27,7 @@
         </div>
       </div>
     </div>
+    @endif
   </div>
   <table class="table table-striped table-sm" id="peminjamen">
     <thead>
