@@ -25,12 +25,18 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::resource('user', UserController::class)
 ->middleware('checkRole:superadmin');
+
 Route::resource('akun', AkunController::class)
 ->middleware('checkRole:superadmin');
+
 Route::resource('barang', BarangController::class)
 ->middleware('checkRole:admin,superadmin');
+Route::post('/import', [BarangController::class, 'importData'])->name('importData.post');
+Route::get('/export', [BarangController::class, 'exportData'])->name('exportData');
+
 Route::resource('peminjaman', PeminjamanController::class)
 ->middleware('checkRole:superadmin,admin,user');
 Route::post('/report/date_report_session', [PeminjamanController::class, 'date_report_session'])->name('date_report_session.post');

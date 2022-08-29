@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Exception;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class BarangController extends Controller
 {
@@ -14,8 +19,82 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $datas = Barang::all();
+        // $datas = Barang::all();
+        // return view('barang.index', compact('datas'));
+        $datas = DB::table('barangs')->orderBy('id', 'DESC')->paginate(5);
         return view('barang.index', compact('datas'));
+    }
+
+
+    function importData(Request $request)
+    {
+        $this->validate($request, [
+            'uploaded_file' => 'required|file|mimes:xls,xlsx'
+        ]);
+
+        $the_file = $request->file('uploaded_file');
+        try{
+            $spreadsheet = IOFactory::load($the_file->getRealPath());
+            $sheet        = $spreadsheet->getActiveSheet();
+            $row_limit    = $sheet->getHighestDataRow();
+            $column_limit = $sheet->getHighestDataColumn();
+            $row_range    = range( 2, $row_limit );
+            $column_range = range( 'E', $column_limit );
+            $startcount = 2;
+            $data = array();
+            foreach ( $row_range as $row ) {
+                $data[] = [
+                    'kode_barang' =>$sheet->getCell( 'A' . $row )->getValue(),
+                    'name' => $sheet->getCell( 'B' . $row )->getValue(),
+                    'tipe' => $sheet->getCell( 'C' . $row )->getValue(),
+                    'tahun' => $sheet->getCell( 'D' . $row )->getValue(),
+                    'jumlah' => $sheet->getCell( 'E' . $row )->getValue(),
+                    // 'Country' =>$sheet->getCell( 'F' . $row )->getValue(),
+                ];
+                $startcount++;
+            }
+            DB::table('barangs')->insert($data);
+        } catch (Exception $e) {
+            $error_code = $e->errorInfo[1];
+            return back()->withErrors('Upload data barang gagal!');
+        }
+        return back()->withSuccess('Upload data barang berhasil!');
+    }
+
+    public function ExportExcel($barang_data)
+    {
+        ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '4000M');
+        try {
+            $spreadSheet = new Spreadsheet();
+            $spreadSheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(20);
+            $spreadSheet->getActiveSheet()->fromArray($barang_data);
+            $Excel_writer = new Xls($spreadSheet);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="Customer_ExportedData.xls"');
+            header('Cache-Control: max-age=0');
+            ob_end_clean();
+            $Excel_writer->save('php://output');
+            exit();
+        } catch (Exception $e) {
+            return;
+        }
+    }
+    
+    function exportData(){
+        $data = DB::table('barangs')->orderBy('id', 'DESC')->get();
+        $data_array [] = array("kode_barang","name","tipe","tahun","jumlah");
+        foreach($data as $data_item)
+        {
+            $data_array[] = array(
+                'kode_barang' =>$data_item->kode_barang,
+                'name' => $data_item->name,
+                'tipe' => $data_item->tipe,
+                'tahun' => $data_item->tahun,
+                'jumlah' => $data_item->jumlah
+            );
+        }
+        $this->ExportExcel($data_array);
     }
 
     /**
