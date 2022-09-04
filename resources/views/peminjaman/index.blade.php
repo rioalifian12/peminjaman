@@ -17,17 +17,20 @@
 
 <div class="table-responsive px-1">
   <div class="d-flex justify-content-between align-items-center mb-3 mt-2">
-    <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1">Tambah Peminjaman</a>
+    <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1 me-2">Tambah Peminjaman</a>
     @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
+      <a href="{{ $final_url_ngrok }}" class="btn btn-primary ml-1 me-2">Scan Peminjaman</a>
+    @endif
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
       <div class="btn-toolbar">
         <div class="btn-group me-2">
           <input type="text" name="dates" class="btn btn-outline-success" />
+          @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
           <button type="button" class="btn btn-sm btn-success">Export</button>
+          @endif
         </div>
       </div>
     </div>
-    @endif
   </div>
   <table class="table table-striped table-sm" id="peminjamen">
     <thead>
@@ -43,7 +46,7 @@
       </tr>
     </thead>
     <tbody>
-      @if(Auth::check() && Auth::user()->role  == "superadmin, admin")
+      @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
       @foreach ($pinjams as $pinjam)
       <tr>
         <td>{{ $loop->iteration }}</td>
@@ -59,11 +62,6 @@
           @else
             <a href="{{ route('peminjaman.edit', $pinjam->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
           @endif
-          <form action="{{ route('peminjaman.destroy', $pinjam->id) }}" method="POST" class="d-inline">
-            @csrf
-            <input type="hidden" name="_method" value="DELETE">
-            <button type="submit" class="badge bg-danger border-0" onclick="return confirm('Apakah anda yakin?')"><span data-feather="x-circle" class="align-text-bottom"></span></button>
-        </form>
         </td>
       </tr>    
       @endforeach
@@ -78,13 +76,7 @@
             <td>{{ $pinjam->tanggal_pinjam }}</td>
             <td>{{ $pinjam->tanggal_kembali }}</td>
             <td>{{ $pinjam->status }}</td>
-            <td>
-              @if ($pinjam->status == 'bebas')
-                  -
-              @else
-                <a href="{{ route('peminjaman.edit', $pinjam->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
-              @endif
-            </td>
+            <td></td>
           </tr>    
         @endforeach
       @endif
@@ -124,7 +116,7 @@
 
   function setSessionReport() {
     $.ajax({
-      url:'http://127.0.0.1:8000/report/date_report_session',
+      url:'http://192.168.18.134:8000/report/date_report_session',
       method:'post',
       headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
       data: {

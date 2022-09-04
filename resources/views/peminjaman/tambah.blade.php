@@ -37,6 +37,11 @@
                 @enderror
             </div>
             <div class="mb-3">
+                <div class="col-6">
+                    <div id="reader" width="600px"></div>
+                </div>
+            </div>
+            <div class="mb-3">
                 <label for="kode_barang" class="mb-2">Kode Barang</label>
                 <input id="kode_barang" type="text" class="form-control @error('kode_barang') is-invalid @enderror" name="kode_barang" autofocus required value="{{ old('kode_barang') }}">
                 @error('kode_barang')
@@ -46,7 +51,7 @@
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="name_barang" class="mb2">Nama Barang</label>
+                <label for="name_barang" class="mb-2">Nama Barang</label>
                 <input id="name_barang" type="text" class="form-control @error('name_barang') is-invalid @enderror" name="name_barang" required value="{{ old('name_barang') }}">
                 @error('name_barang')
                     <div class="invalid-feedback">
@@ -69,7 +74,7 @@
     <div class="col-md-6">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">Data Buku</h3>
+                <h3 class="box-title">Data Barang</h3>
             </div>
             <div class="box-body">
                 <table class="table" id="tabel">
@@ -96,8 +101,9 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(document).ready( function () {
+<script type="text/javascript"></script>
+    <script>
+     $(document).ready( function () {
       $('#tabel').DataTable();
   } );
   </script>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
+use App\Models\Barang;
 use Illuminate\Http\Request;
 
 use Auth;
@@ -26,6 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $barang = Barang::all();
+        return view('home', compact('barang'));
     }
 }

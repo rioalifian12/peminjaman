@@ -141,6 +141,35 @@
         </a>
       </div>
     </div>
+    <div class="col-md-6">
+      <div class="box">
+          <div class="box-header">
+              <h3 class="box-title">Data Barang</h3>
+          </div>
+          <div class="box-body">
+              <table class="table" id="tabel">
+                  <thead>
+                      <tr>
+                          <th>#</th>
+                          <th>Kode Barang</th>
+                          <th>Nama Barang</th>
+                          <th>Jumlah</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      @foreach ($barang as $item)
+                      <tr>
+                          <td>{{ $loop->iteration }}</td>
+                          <td>{{ $item['kode_barang'] }}</td>
+                          <td>{{ $item['name'] }}</td>
+                          <td>{{ $item['jumlah'] }}</td>
+                      </tr>
+                      @endforeach
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
   </div>
   @endif
 @endsection

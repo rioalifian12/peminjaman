@@ -1,6 +1,36 @@
 @extends('layouts.main')
 
 @section('container')
+
+{{-- Inline CSS --}}
+<style>
+  .table-wrapper {
+    width: 100%; 
+    overflow-y: hidden; 
+    overflow-x: hidden;
+  }
+
+  .form-input-excel {
+    flex: 1;
+  }
+
+  .table-wrapper tbody td:nth-child(7) div {
+    width: 5rem;
+  }
+
+  @media (max-width: 992px) {
+    .table-wrapper {
+      overflow-x: scroll;
+    }
+  }
+
+  @media (max-width: 967px) {
+    .btn-header-wrapper {
+      display: block !important;
+    }
+  }
+</style>
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 border-bottom">
   <h1 class="h2">Data Barang</h1>
 </div>
@@ -12,9 +42,11 @@
 @endif
 
 <div class="table-responsive px-1">
-  <div class="d-flex justify-content-between align-items-center mb-3 mt-2">
-  <a href="{{ route ('barang.create') }}" class="btn btn-primary">Tambah Barang</a>
-    <form action="{{url("import")}}" method="post" enctype="multipart/form-data" class="mb-3 mt-0">
+  {{-- d-flex justify-content-between align-items-center  --}}
+  <div class="d-flex justify-content-between align-items-center mb-3 mt-2 btn-header-wrapper">
+    <a href="{{ route ('barang.create') }}" class="btn btn-primary me-2">Tambah Barang</a>
+    <a href="{{url("export")}}" class="btn btn-primary mb-3 mt-3 me-5">Export Excel Data</a>
+    <form action="{{url("import")}}" method="post" enctype="multipart/form-data" class="m-0 form-input-excel">
       @csrf
       <fieldset>
           <label>Upload file excel  <small class="warning text-muted">{{__('Please upload only Excel (.xlsx or .xls) files')}}</small></label>
@@ -33,49 +65,52 @@
     </form>
   </div>
 
-  <table class="table table-striped table-sm" id="barangs">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Kode Barang</th>
-        <th scope="col">Nama</th>
-        <th scope="col">Tipe</th>
-        <th scope="col">Tahun</th>
-        <th scope="col">Jumlah</th>
-        <th scope="col">Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if(!empty($datas) && $datas->count())
-        @foreach($datas as $data)
-          <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $data->kode_barang }}</td>
-            <td>{{ $data->name }}</td>
-            <td>{{ $data->tipe }}</td>
-            <td>{{ $data->tahun }}</td>
-            <td>{{ $data->jumlah }}</td>
-            <td>
-              <a href="{{ route('barang.edit', $data->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
-              <form action="{{ route('barang.destroy', $data->id) }}" method="POST" class="d-inline">
-                @csrf
-                <input type="hidden" name="_method" value="DELETE">
-                <button type="submit" class="badge bg-danger border-0" onclick="return confirm('Apakah anda yakin?')"><span data-feather="x-circle" class="align-text-bottom"></span></button>
-            </form>
-            </td>
-          </tr>
-        @endforeach
-      @else
+  <div class="p-2 table-wrapper">
+    <table class="table table-striped table-sm" id="barangs">
+      <thead>
         <tr>
-          <td colspan="10">There are no data.</td>
+          <th scope="col">#</th>
+          <th scope="col">Kode Barang</th>
+          <th scope="col">Nama</th>
+          <th scope="col">Tipe</th>
+          <th scope="col">Tahun</th>
+          <th scope="col">Jumlah</th>
+          <th scope="col">Barcode</th>
+          <th scope="col">Aksi</th>
         </tr>
-      @endif
-    </tbody>
-  </table>
-  {!! $datas->links() !!}
-  <div class="pull-right">
-    <a href="{{url("export")}}" class="btn btn-primary mb-3 mt-2">Export Excel Data</a>
+      </thead>
+      <tbody>
+        @if(!empty($datas) && $datas->count())
+        <?php $baseUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'; ?>
+          @foreach($datas as $data)
+          <?php $url_scan = $baseUrl.'scan/peminjaman_by_kode_barang/'. $data->kode_barang ?>
+            <tr>
+              <td>{{ $loop->iteration }}</td>
+              <td>{{ $data->kode_barang }}</td>
+              <td>{{ $data->name }}</td>
+              <td>{{ $data->tipe }}</td>
+              <td>{{ $data->tahun }}</td>
+              <td>{{ $data->jumlah }}</td>
+              <td><img src="data:image/png;base64,{{ DNS2D::getBarcodePNG($url_scan,'QRCODE') }}" height="100" width="100" /></td>
+              <td>
+                <a href="{{ route('barang.edit', $data->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
+                <form action="{{ route('barang.destroy', $data->id) }}" method="POST" class="d-inline">
+                  @csrf
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button type="submit" class="badge bg-danger border-0" onclick="return confirm('Apakah anda yakin?')"><span data-feather="x-circle" class="align-text-bottom"></span></button>
+              </form>
+              </td>
+            </tr>
+          @endforeach
+        @else
+          <tr>
+            <td colspan="10">There are no data.</td>
+          </tr>
+        @endif
+      </tbody>
+    </table>
   </div>
+  {!! $datas->links() !!}
 </div>
 
 <script type="text/javascript">

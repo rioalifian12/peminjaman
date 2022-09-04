@@ -9,6 +9,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use DNS2D;
 
 class BarangController extends Controller
 {
@@ -73,6 +74,7 @@ class BarangController extends Controller
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="Customer_ExportedData.xls"');
             header('Cache-Control: max-age=0');
+            header('Content-Transfer-Encoding: BINARY');
             ob_end_clean();
             $Excel_writer->save('php://output');
             exit();
@@ -86,6 +88,7 @@ class BarangController extends Controller
         $data_array [] = array("kode_barang","name","tipe","tahun","jumlah");
         foreach($data as $data_item)
         {
+
             $data_array[] = array(
                 'kode_barang' =>$data_item->kode_barang,
                 'name' => $data_item->name,

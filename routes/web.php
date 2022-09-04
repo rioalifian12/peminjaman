@@ -41,6 +41,7 @@ Route::resource('peminjaman', PeminjamanController::class)
 ->middleware('checkRole:superadmin,admin,user');
 Route::post('/report/date_report_session', [PeminjamanController::class, 'date_report_session'])->name('date_report_session.post');
 Route::get('/report/show_report_session', [PeminjamanController::class, 'show_report_session'])->name('show_report_session');
+Route::get('/scan/peminjaman_by_kode_barang/{kode_barang}', [PeminjamanController::class, 'peminjaman_by_kode_barang'])->name('peminjaman_by_kode_barang');
 Route::get('/token', function () {
     return csrf_token(); 
 });

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Barang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Auth;
 
 class PeminjamanController extends Controller
 {
@@ -55,6 +56,15 @@ class PeminjamanController extends Controller
      */
     public function index()
     {
+        $url_ngrok = DB::table('dev_setting')
+                ->where('code', '=', 'url_ngrok')
+                ->take(1)
+                ->get();
+        $dev_setting = $url_ngrok->toArray();
+        $dev_setting = $dev_setting[0];
+
+        $final_url_ngrok = $dev_setting->value;
+
         $session_name_user = '';
         $session_new_start_date = date("Y-m-d");
         $session_new_end_date = date("Y-m-d");
@@ -123,7 +133,8 @@ class PeminjamanController extends Controller
         return view('peminjaman.index')
             ->with(compact('pinjams'))
             ->with(compact('final_new_start_date'))
-            ->with(compact('final_new_end_date'));
+            ->with(compact('final_new_end_date'))
+            ->with(compact('final_url_ngrok'));
     }
 
     /**
@@ -283,5 +294,82 @@ class PeminjamanController extends Controller
         $pinjams = Peminjaman::findOrFail($id);
         $pinjams->delete();
         return redirect('/peminjaman')->with('success', 'Hapus peminjaman berhasil!');
+    }
+
+    public function peminjaman_by_kode_barang($kode_barang)
+    {
+        $get_no_id = Auth::id();
+        $auth = DB::table('users')
+                ->where('id', '=', $get_no_id)
+                ->take(1)
+                ->get();
+        $final_auth = $auth->toArray();
+        $final_auth = $final_auth[0];
+
+        $no_id = $final_auth->no_id;
+        $name = $final_auth->name;
+        $tanggal_pinjam = date("Y-m-d");
+
+        // echo "<pre>";
+        // print_r($tanggal_pinjam);
+        // exit();
+
+        $barang = DB::table('barangs')
+                ->where('kode_barang', '=', $kode_barang)
+                ->take(1)
+                ->get();
+        $final_barang = $barang->toArray();
+        $final_barang = $final_barang[0];
+
+        // echo "<pre>";
+        // print_r($final_barang);
+        // exit();
+        
+        
+        //     [id] => 1
+        //     [kode_barang] => B1000
+        //     [name] => Printer Canon
+        //     [tipe] => Pixma iP2770
+        //     [tahun] => 2010
+        //     [jumlah] => 4
+        $finalBarang_id = $final_barang->id;
+        $finalBarang_kode_barang = $final_barang->kode_barang;
+        $finalBarang_name = $final_barang->name;
+        $finalBarang_tipe = $final_barang->tipe;
+        $finalBarang_tahun = $final_barang->tahun;
+        $finalBarang_jumlah = $final_barang->jumlah;
+        $final_skema_barang = array(
+            'finalBarang_id' => $finalBarang_id,
+            'finalBarang_kode_barang' => $finalBarang_kode_barang,
+            'finalBarang_name' => $finalBarang_name,
+            'finalBarang_tipe' => $finalBarang_tipe,
+            'finalBarang_tahun' => $finalBarang_tahun,
+            'finalBarang_jumlah' => $finalBarang_jumlah
+        );
+        
+        if ($finalBarang_jumlah >= 1) {
+
+            // update jumlah barang
+            $final_update_jumlah_barang = $finalBarang_jumlah - 1;
+            DB::table('barangs')
+                ->where('id', $finalBarang_id)
+                ->update(['jumlah' => $final_update_jumlah_barang]);
+
+            // insert data
+            $insert_data = array(
+                'no_id' => $no_id,
+                'name_user' => $name,
+                'kode_barang' => $finalBarang_kode_barang,
+                'name_barang' => $finalBarang_name,
+                'tanggal_pinjam' => $tanggal_pinjam,
+            );
+
+            Peminjaman::create($insert_data);
+            return redirect('/peminjaman')->with('success', 'Tambah peminjaman berhasil!');
+        } else {
+            return redirect('/peminjaman')->with('error', 'Stok barang habis!');
+        }
+
+        
     }
 }
