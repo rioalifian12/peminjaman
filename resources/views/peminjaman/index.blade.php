@@ -17,17 +17,17 @@
 
 <div class="table-responsive px-1">
   <div class="d-flex justify-content-between align-items-center mb-3 mt-2">
-    <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1 me-2">Tambah Peminjaman</a>
     @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
-      <a href="{{ $final_url_ngrok }}" class="btn btn-primary ml-1 me-2">Scan Peminjaman</a>
+      <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1 me-2">Tambah Peminjaman</a>
     @endif
+    <a href="{{ $final_url_ngrok }}" class="btn btn-primary ml-1 me-2">Scan Peminjaman</a>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
       <div class="btn-toolbar">
         <div class="btn-group me-2">
           <input type="text" name="dates" class="btn btn-outline-success" />
-          @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
+          {{-- @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
           <button type="button" class="btn btn-sm btn-success">Export</button>
-          @endif
+          @endif --}}
         </div>
       </div>
     </div>

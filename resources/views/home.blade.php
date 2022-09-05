@@ -171,5 +171,11 @@
       </div>
   </div>
   </div>
+  <script type="text/javascript"></script>
+    <script>
+     $(document).ready( function () {
+      $('#tabel').DataTable();
+  } );
+  </script>
   @endif
 @endsection
