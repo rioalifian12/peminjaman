@@ -18,9 +18,15 @@
 <div class="table-responsive px-1">
   <div class="d-flex justify-content-between align-items-center mb-3 mt-2">
     @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
-      <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1 me-2">Tambah Peminjaman</a>
+      <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1 me-2">
+        <span data-feather="plus-circle" class="mb-1 me-1"></span>
+        Tambah
+      </a>
     @endif
-    <a href="{{ $final_url_ngrok }}" class="btn btn-primary ml-1 me-2">Scan Peminjaman</a>
+    <a href="{{ $final_url_ngrok }}" class="btn btn-primary ml-1 me-2">
+      <span data-feather="camera" class="mb-1 me-1"></span>
+      Scan
+    </a>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
       <div class="btn-toolbar">
         <div class="btn-group me-2">
@@ -42,11 +48,12 @@
         <th scope="col">Tanggal Pinjam</th>
         <th scope="col">Tanggal Kembali</th>
         <th scope="col">Status</th>
+        @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
         <th scope="col">Aksi</th>
+        @endif
       </tr>
     </thead>
     <tbody>
-      @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
       @foreach ($pinjams as $pinjam)
       <tr>
         <td>{{ $loop->iteration }}</td>
@@ -56,6 +63,7 @@
         <td>{{ $pinjam->tanggal_pinjam }}</td>
         <td>{{ $pinjam->tanggal_kembali }}</td>
         <td>{{ $pinjam->status }}</td>
+        @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
         <td>
           @if ($pinjam->status == 'bebas')
               -
@@ -63,24 +71,9 @@
             <a href="{{ route('peminjaman.edit', $pinjam->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
           @endif
         </td>
+        @endif
       </tr>    
       @endforeach
-      @elseif (Auth::check())
-      
-        @foreach ($pinjams as $pinjam)
-          <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $pinjam->name_user }}</td>
-            <td>{{ $pinjam->kode_barang }}</td>
-            <td>{{ $pinjam->name_barang }}</td>
-            <td>{{ $pinjam->tanggal_pinjam }}</td>
-            <td>{{ $pinjam->tanggal_kembali }}</td>
-            <td>{{ $pinjam->status }}</td>
-            <td></td>
-          </tr>    
-        @endforeach
-      @endif
-
     </tbody>
   </table>
 </div>

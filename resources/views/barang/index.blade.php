@@ -44,9 +44,16 @@
 <div class="table-responsive px-1">
   {{-- d-flex justify-content-between align-items-center  --}}
   <div class="d-flex justify-content-between align-items-center mb-3 mt-2 btn-header-wrapper">
-    <a href="{{ route ('barang.create') }}" class="btn btn-primary me-2">Tambah Barang</a>
-    <a href="{{url("export")}}" class="btn btn-primary mb-3 mt-3 me-5">Export Excel Data</a>
-    <form action="{{url("import")}}" method="post" enctype="multipart/form-data" class="m-0 form-input-excel">
+    @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
+    <a href="{{ route ('barang.create') }}" class="btn btn-primary me-2">
+      <span data-feather="plus-circle" class="mb-1 me-1"></span>
+      Tambah
+    </a>
+    <a href="{{url("export")}}" class="btn btn-primary mb-3 mt-3 me-5">
+      <span data-feather="printer" class="mb-1 me-1"></span>
+      Export
+    </a>
+    <form action="{{url("import")}}" method="post" enctype="multipart/form-data" class="m-0 mb-3 form-input-excel">
       @csrf
       <fieldset>
           <label>Upload file excel  <small class="warning text-muted">{{__('Please upload only Excel (.xlsx or .xls) files')}}</small></label>
@@ -63,6 +70,7 @@
           </div>
       </fieldset>
     </form>
+    @endif
   </div>
 
   <div class="p-2 table-wrapper">
@@ -70,13 +78,16 @@
       <thead>
         <tr>
           <th scope="col">#</th>
+          <th scope="col">Image</th>
           <th scope="col">Kode Barang</th>
           <th scope="col">Nama</th>
           <th scope="col">Tipe</th>
           <th scope="col">Tahun</th>
           <th scope="col">Jumlah</th>
+          @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
           <th scope="col">Barcode</th>
           <th scope="col">Aksi</th>
+          @endif
         </tr>
       </thead>
       <tbody>
@@ -86,12 +97,18 @@
           <?php $url_scan = $baseUrl.'scan/peminjaman_by_kode_barang/'. $data->kode_barang ?>
             <tr>
               <td>{{ $loop->iteration }}</td>
+              <td>
+                <a href="{{ route('barang.show', $data->id) }}">
+                  <img src="{{ asset('storage/' . $data->image) }}" alt="{{ $data->image }}" style="max-height: 100px; overflow:hidden">
+                </a>
+              </td>
               <td>{{ $data->kode_barang }}</td>
               <td>{{ $data->name }}</td>
               <td>{{ $data->tipe }}</td>
               <td>{{ $data->tahun }}</td>
               <td>{{ $data->jumlah }}</td>
-              <td><img src="data:image/png;base64,{{ DNS2D::getBarcodePNG($url_scan,'QRCODE') }}" height="100" width="100" /></td>
+              @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
+              <td><img src="data:image/png;base64,{{ DNS2D::getBarcodePNG($url_scan,'QRCODE') }}" style="max-height: 100px; overflow:hidden" /></td>
               <td>
                 <a href="{{ route('barang.edit', $data->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
                 <form action="{{ route('barang.destroy', $data->id) }}" method="POST" class="d-inline">
@@ -100,6 +117,7 @@
                   <button type="submit" class="badge bg-danger border-0" onclick="return confirm('Apakah anda yakin?')"><span data-feather="x-circle" class="align-text-bottom"></span></button>
               </form>
               </td>
+              @endif
             </tr>
           @endforeach
         @else

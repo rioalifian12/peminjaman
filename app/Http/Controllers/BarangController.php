@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use DNS2D;
+use Illuminate\Support\Facades\Storage;
 
 class BarangController extends Controller
 {
@@ -85,7 +86,7 @@ class BarangController extends Controller
     
     function exportData(){
         $data = DB::table('barangs')->orderBy('id', 'DESC')->get();
-        $data_array [] = array("kode_barang","name","tipe","tahun","jumlah");
+        $data_array [] = array("kode_barang","name","tipe","tahun","jumlah","image");
         foreach($data as $data_item)
         {
 
@@ -94,7 +95,8 @@ class BarangController extends Controller
                 'name' => $data_item->name,
                 'tipe' => $data_item->tipe,
                 'tahun' => $data_item->tahun,
-                'jumlah' => $data_item->jumlah
+                'jumlah' => $data_item->jumlah,
+                'image' => $data_item->image
             );
         }
         $this->ExportExcel($data_array);
@@ -124,7 +126,12 @@ class BarangController extends Controller
             'tipe' => 'required|max:30',
             'tahun' => 'required|max:4',
             'jumlah' => 'required|max:3',
+            'image' => 'image|file|max:1024'
         ]);
+
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('post-image');
+        }
 
         Barang::create($validatedData);
         return redirect('/barang')->with('success', 'Tambah barang berhasil!');
@@ -138,7 +145,8 @@ class BarangController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Barang::findOrFail($id);
+        return view('barang.show', compact('data'));
     }
 
     /**
@@ -149,6 +157,7 @@ class BarangController extends Controller
      */
     public function edit($id)
     {
+        $data = DB::table('barangs')->first();
         $data = Barang::findOrFail($id);
         return view('barang.edit', compact('data'));
     }
@@ -162,8 +171,24 @@ class BarangController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+            'kode_barang' => 'required|max:12',
+            'name' => 'required|max:15',
+            'tipe' => 'required|max:30',
+            'tahun' => 'required|max:4',
+            'jumlah' => 'required|max:3',
+            'image' => 'image|file|max:1024'
+        ]);
+
+        if ($request->file('image')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            $validatedData['image'] = $request->file('image')->store('post-image');
+        }
+
         $data = Barang::findOrFail($id);
-        $data->update($request->all());
+        $data->update($validatedData);
         return redirect('/barang')->with('success', 'Edit barang berhasil!');
     }
 
@@ -173,9 +198,12 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Barang $data, $id)
     {
         $data = Barang::findOrFail($id);
+        if ($data->image) {
+            Storage::delete($data->image);
+        }
         $data->delete();
         return redirect('/barang')->with('success', 'Hapus barang berhasil!');
     }

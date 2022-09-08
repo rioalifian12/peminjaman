@@ -33,7 +33,7 @@ Route::resource('akun', AkunController::class)
 ->middleware('checkRole:superadmin');
 
 Route::resource('barang', BarangController::class)
-->middleware('checkRole:admin,superadmin');
+->middleware('checkRole:admin,superadmin,user');
 Route::post('/import', [BarangController::class, 'importData'])->name('importData.post');
 Route::get('/export', [BarangController::class, 'exportData'])->name('exportData');
 

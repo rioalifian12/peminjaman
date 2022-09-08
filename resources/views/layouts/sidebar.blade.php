@@ -59,6 +59,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link {{ Request::is('barang*') ? 'active' : '' }}" href="/barang">
+            <span data-feather="box" class="align-text-bottom mt-3"></span>
+            Barang
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link {{ Request::is('peminjaman*') ? 'active' : '' }}" href="/peminjaman">
             <span data-feather="file-text" class="align-text-bottom mt-3"></span>
             Peminjaman

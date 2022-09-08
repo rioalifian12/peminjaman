@@ -124,6 +124,24 @@
   @elseif (Auth::check())
   <div class="row row-cols-1 row-cols-md-2 g-4">
     <div class="col">
+      <div class="card text-bg-warning">
+        <div class="card-body">
+          <div class="d-flex flex-row align-items-center justify-content-between mb-3">
+            <div data-feather="box" class="align-text-bottom mt-3 text-light m-0" style="width: 3.5rem; height: 3.5rem;"></div>
+            <div class="fw-bold text-light">Data Barang</div>
+          </div>
+        </div>
+        <a href="/barang" class="text-decoration-none">
+          <div class="card-footer text-bg-light fw-bold">
+            <div class="d-flex flex-row align-items-center justify-content-between">
+              <div class="fw-bold m-0">View details</div>
+              <div data-feather="arrow-right-circle" class="align-text-bottom" style="width: 1.5rem; height: 1.5rem;"></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col">
       <div class="card text-bg-success">
         <div class="card-body">
           <div class="d-flex flex-row align-items-center justify-content-between mb-3">
@@ -141,7 +159,7 @@
         </a>
       </div>
     </div>
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
       <div class="box">
           <div class="box-header">
               <h3 class="box-title">Data Barang</h3>
@@ -151,6 +169,7 @@
                   <thead>
                       <tr>
                           <th>#</th>
+                          <th>Image</th>
                           <th>Kode Barang</th>
                           <th>Nama Barang</th>
                           <th>Jumlah</th>
@@ -160,6 +179,11 @@
                       @foreach ($barang as $item)
                       <tr>
                           <td>{{ $loop->iteration }}</td>
+                          <td>
+                            <a href="{{ route('barang.show', $item->id) }}">
+                              <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->image }}" style="max-height: 100px; overflow:hidden">
+                            </a>
+                          </td>
                           <td>{{ $item['kode_barang'] }}</td>
                           <td>{{ $item['name'] }}</td>
                           <td>{{ $item['jumlah'] }}</td>
@@ -169,7 +193,7 @@
               </table>
           </div>
       </div>
-  </div>
+    </div> --}}
   </div>
   <script type="text/javascript"></script>
     <script>

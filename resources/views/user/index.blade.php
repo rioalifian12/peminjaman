@@ -12,7 +12,10 @@
 @endif
 
 <div class="table-responsive">
-  <a href="{{ route ('user.create') }}" class="btn btn-primary mb-3 mt-2">Tambah User</a>
+  <a href="{{ route ('user.create') }}" class="btn btn-primary mb-3 mt-2">
+    <span data-feather="plus-circle" class="mb-1 me-1"></span>
+    Tambah
+  </a>
   <table class="table table-striped table-sm" id="users">
     <thead>
       <tr>

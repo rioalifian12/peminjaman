@@ -6,7 +6,7 @@
 </div>
 
 <div class="col-lg-7">
-    <form method="post" action="{{ route('barang.update', $data->id) }}" class="mb-5">
+    <form method="post" action="{{ route('barang.update', $data->id) }}" class="mb-5" enctype="multipart/form-data">
         @method('put') 
         @csrf
         <div class="mb-3">
@@ -46,7 +46,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="jumlah" class="form-label">No HP</label>
+            <label for="jumlah" class="form-label">Jumlah</label>
             <input id="jumlah" type="number" class="form-control @error('jumlah') is-invalid @enderror" name="jumlah" value="{{ old('jumlah', $data->jumlah) }}">
             @error('jumlah')
                 <div class="invalid-feedback">
@@ -54,7 +54,35 @@
                 </div>
             @enderror
         </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image</label>
+            <input type="hidden" name="oldImage" value="{{ $data->image }}">
+            <img src="{{ asset('storage/' . $data->image) }}" alt="{{ $data->image }}" class="img-preview img-fluid mb-4 col-sm-5 d-block">
+            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" onchange="previewImage()">
+            @error('image')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
         <button type="submit" class="btn btn-primary mb-5">Simpan</button>
-      </form>
+    </form>
 </div>
+<script type="text/javascript">
+    function previewImage()
+    {
+        const image = document.querySelector('#image');
+        const imgPreview = document.querySelector('.img-preview');
+
+        imgPreview.style.display = 'block';
+
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent)
+        {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
 @endsection

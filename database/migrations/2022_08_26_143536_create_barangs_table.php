@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tipe')->nullable();
             $table->string('tahun')->nullable();
             $table->string('jumlah')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
