@@ -16,5 +16,6 @@ class Barang extends Model
         'tahun',
         'jumlah',
         'image',
+        'kondisi',
     ];
 }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('tahun')->nullable();
             $table->string('jumlah')->nullable();
             $table->string('image')->nullable();
+            $table->enum('kondisi', ['baik', 'rusak'])->default('baik');
             $table->timestamps();
         });
     }

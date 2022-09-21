@@ -161,6 +161,7 @@ class PeminjamanController extends Controller
         $kode_barang = $request->input('kode_barang');
         $name_barang = $request->input('name_barang');
         $tanggal_pinjam = $request->input('tanggal_pinjam');
+        $tanggal_kembali = $request->input('tanggal_kembali');
 
         $barang = DB::table('barangs')
                 ->where('kode_barang', '=', $kode_barang)
@@ -181,16 +182,18 @@ class PeminjamanController extends Controller
         $finalBarang_tipe = $final_barang->tipe;
         $finalBarang_tahun = $final_barang->tahun;
         $finalBarang_jumlah = $final_barang->jumlah;
+        $finalBarang_kondisi = $final_barang->kondisi;
         $final_skema_barang = array(
             'finalBarang_id' => $finalBarang_id,
             'finalBarang_kode_barang' => $finalBarang_kode_barang,
             'finalBarang_name' => $finalBarang_name,
             'finalBarang_tipe' => $finalBarang_tipe,
             'finalBarang_tahun' => $finalBarang_tahun,
-            'finalBarang_jumlah' => $finalBarang_jumlah
+            'finalBarang_jumlah' => $finalBarang_jumlah,
+            'finalBarang_kondisi' => $finalBarang_kondisi
         );
         
-        if ($finalBarang_jumlah >= 1) {
+        if ($finalBarang_kondisi == 'baik') {
             // insert ke database
             $validatedData = $request->validate([
                 'no_id' => 'required|max:12',
@@ -198,6 +201,7 @@ class PeminjamanController extends Controller
                 'kode_barang' => 'required|max:12',
                 'name_barang' => 'required|max:20',
                 'tanggal_pinjam' => 'required',
+                'tanggal_kembali' => 'required',
             ]);
 
             // update jumlah barang
@@ -209,7 +213,7 @@ class PeminjamanController extends Controller
             Peminjaman::create($validatedData);
             return redirect('/peminjaman')->with('success', 'Tambah peminjaman berhasil!');
         } else {
-            return redirect('/peminjaman/create')->with('error', 'Stok barang habis!');
+            return redirect('/peminjaman/create')->with('error', 'Pilih barang lain, barang rusak!');
         }
     }
 
@@ -219,9 +223,37 @@ class PeminjamanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($kode_barang)
     {
-        //
+        $peminjamen = DB::table('peminjamen')
+                ->where('kode_barang', '=', $kode_barang)
+                ->get();
+        $final_peminjamen = $peminjamen->toArray();
+        $final_peminjamen = end($final_peminjamen);
+
+        $id_final = $final_peminjamen->id;
+        $no_id_final = $final_peminjamen->no_id;
+        $name_user_final = $final_peminjamen->name_user;
+        $kode_barang_final = $final_peminjamen->kode_barang;
+        $name_barang_final = $final_peminjamen->name_barang;
+        $tanggal_pinjam_final = $final_peminjamen->tanggal_pinjam;
+        $tanggal_kembali_final = $final_peminjamen->tanggal_kembali;
+        $status_final = $final_peminjamen->status;
+        $final_skema_pinjam = array(
+            'id_final' => $id_final,
+            'no_id_final' => $no_id_final,
+            'name_user_final' => $name_user_final,
+            'kode_barang_final' => $kode_barang_final,
+            'name_barang_final' => $name_barang_final,
+            'tanggal_pinjam_final' => $tanggal_pinjam_final,
+            'tanggal_kembali_final' => $tanggal_kembali_final,
+            'status_final' => $status_final
+        );
+        // echo "<pre>";
+        // print_r($peminjamen);
+        // exit();
+        
+            return view('peminjaman.show', compact('final_skema_pinjam'));
     }
 
     /**
@@ -294,82 +326,5 @@ class PeminjamanController extends Controller
         $pinjams = Peminjaman::findOrFail($id);
         $pinjams->delete();
         return redirect('/peminjaman')->with('success', 'Hapus peminjaman berhasil!');
-    }
-
-    public function peminjaman_by_kode_barang($kode_barang)
-    {
-        $get_no_id = Auth::id();
-        $auth = DB::table('users')
-                ->where('id', '=', $get_no_id)
-                ->take(1)
-                ->get();
-        $final_auth = $auth->toArray();
-        $final_auth = $final_auth[0];
-
-        $no_id = $final_auth->no_id;
-        $name = $final_auth->name;
-        $tanggal_pinjam = date("Y-m-d");
-
-        // echo "<pre>";
-        // print_r($tanggal_pinjam);
-        // exit();
-
-        $barang = DB::table('barangs')
-                ->where('kode_barang', '=', $kode_barang)
-                ->take(1)
-                ->get();
-        $final_barang = $barang->toArray();
-        $final_barang = $final_barang[0];
-
-        // echo "<pre>";
-        // print_r($final_barang);
-        // exit();
-        
-        
-        //     [id] => 1
-        //     [kode_barang] => B1000
-        //     [name] => Printer Canon
-        //     [tipe] => Pixma iP2770
-        //     [tahun] => 2010
-        //     [jumlah] => 4
-        $finalBarang_id = $final_barang->id;
-        $finalBarang_kode_barang = $final_barang->kode_barang;
-        $finalBarang_name = $final_barang->name;
-        $finalBarang_tipe = $final_barang->tipe;
-        $finalBarang_tahun = $final_barang->tahun;
-        $finalBarang_jumlah = $final_barang->jumlah;
-        $final_skema_barang = array(
-            'finalBarang_id' => $finalBarang_id,
-            'finalBarang_kode_barang' => $finalBarang_kode_barang,
-            'finalBarang_name' => $finalBarang_name,
-            'finalBarang_tipe' => $finalBarang_tipe,
-            'finalBarang_tahun' => $finalBarang_tahun,
-            'finalBarang_jumlah' => $finalBarang_jumlah
-        );
-        
-        if ($finalBarang_jumlah >= 1) {
-
-            // update jumlah barang
-            $final_update_jumlah_barang = $finalBarang_jumlah - 1;
-            DB::table('barangs')
-                ->where('id', $finalBarang_id)
-                ->update(['jumlah' => $final_update_jumlah_barang]);
-
-            // insert data
-            $insert_data = array(
-                'no_id' => $no_id,
-                'name_user' => $name,
-                'kode_barang' => $finalBarang_kode_barang,
-                'name_barang' => $finalBarang_name,
-                'tanggal_pinjam' => $tanggal_pinjam,
-            );
-
-            Peminjaman::create($insert_data);
-            return redirect('/peminjaman')->with('success', 'Tambah peminjaman berhasil!');
-        } else {
-            return redirect('/peminjaman')->with('error', 'Stok barang habis!');
-        }
-
-        
     }
 }

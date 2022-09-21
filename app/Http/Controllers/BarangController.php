@@ -41,7 +41,7 @@ class BarangController extends Controller
             $row_limit    = $sheet->getHighestDataRow();
             $column_limit = $sheet->getHighestDataColumn();
             $row_range    = range( 2, $row_limit );
-            $column_range = range( 'E', $column_limit );
+            $column_range = range( 'F', $column_limit );
             $startcount = 2;
             $data = array();
             foreach ( $row_range as $row ) {
@@ -51,7 +51,7 @@ class BarangController extends Controller
                     'tipe' => $sheet->getCell( 'C' . $row )->getValue(),
                     'tahun' => $sheet->getCell( 'D' . $row )->getValue(),
                     'jumlah' => $sheet->getCell( 'E' . $row )->getValue(),
-                    // 'Country' =>$sheet->getCell( 'F' . $row )->getValue(),
+                    'kondisi' =>$sheet->getCell( 'F' . $row )->getValue(),
                 ];
                 $startcount++;
             }
@@ -86,7 +86,7 @@ class BarangController extends Controller
     
     function exportData(){
         $data = DB::table('barangs')->orderBy('id', 'DESC')->get();
-        $data_array [] = array("kode_barang","name","tipe","tahun","jumlah","image");
+        $data_array [] = array("kode_barang","name","tipe","tahun","jumlah","image","kondisi");
         foreach($data as $data_item)
         {
 
@@ -96,7 +96,8 @@ class BarangController extends Controller
                 'tipe' => $data_item->tipe,
                 'tahun' => $data_item->tahun,
                 'jumlah' => $data_item->jumlah,
-                'image' => $data_item->image
+                'image' => $data_item->image,
+                'kondisi' => $data_item->kondisi
             );
         }
         $this->ExportExcel($data_array);
@@ -143,10 +144,34 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($kode_barang)
     {
-        $data = Barang::findOrFail($id);
-        return view('barang.show', compact('data'));
+        $barangs = DB::table('barangs')
+                ->where('kode_barang', '=', $kode_barang)
+                ->take(1)
+                ->get();
+        $final_barangs = $barangs->toArray();
+        $final_barangs = $final_barangs[0];
+
+        $id_final = $final_barangs->id;
+        $kode_barang_final = $final_barangs->kode_barang;
+        $name_final = $final_barangs->name;
+        $tipe_final = $final_barangs->tipe;
+        $tahun_final = $final_barangs->tahun;
+        $image_final = $final_barangs->image;
+        $final_skema_barang = array(
+            'id_final' => $id_final,
+            'kode_barang_final' => $kode_barang_final,
+            'name_final' => $name_final,
+            'tipe_final' => $tipe_final,
+            'tahun_final' => $tahun_final,
+            'image_final' => $image_final
+        );
+        // echo "<pre>";
+        // print_r($final_skema_pinjam);
+        // exit();
+        
+        return view('barang.show', compact('final_skema_barang'));
     }
 
     /**
@@ -177,7 +202,8 @@ class BarangController extends Controller
             'tipe' => 'required|max:30',
             'tahun' => 'required|max:4',
             'jumlah' => 'required|max:3',
-            'image' => 'image|file|max:1024'
+            'image' => 'image|file|max:1024',
+            'kondisi' => 'required'
         ]);
 
         if ($request->file('image')) {

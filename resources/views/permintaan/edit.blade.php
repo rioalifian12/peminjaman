@@ -6,13 +6,14 @@
 </div>
 
 <div class="col-lg-7">
-    <form method="post" action="{{ route('peminjaman.update', $pinjams->id) }}" class="mb-5">
+    <form method="post" action="{{ route('permintaan.update', $datas->id) }}" class="mb-5">
         @method('put') 
         @csrf
         <div class="mb-3">
             <label for="status" class="mb-2">Status</label>
             <select name="status" id="" class="form-select">
-                <option {{ old('status',$pinjams->status)=="bebas"? 'selected':'' }} value="bebas">Bebas</option>
+                <option {{ old('status',$datas->status)=="ditolak"? 'selected':'' }} value="ditolak">Ditolak</option>
+                <option {{ old('status',$datas->status)=="diterima"? 'selected':'' }} value="diterima">Diterima</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary mb-5">Simpan</button>

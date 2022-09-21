@@ -55,6 +55,13 @@
             @enderror
         </div>
         <div class="mb-3">
+            <label for="kondisi" class="mb-2">Kondisi</label>
+            <select name="kondisi" id="" class="form-select">
+                <option {{ old('kondisi',$data->kondisi)=="baik"? 'selected':'' }} value="baik">Baik</option>
+                <option {{ old('kondisi',$data->kondisi)=="rusak"? 'selected':'' }} value="rusak">Rusak</option>
+            </select>
+        </div>
+        <div class="mb-3">
             <label for="image" class="form-label">Image</label>
             <input type="hidden" name="oldImage" value="{{ $data->image }}">
             <img src="{{ asset('storage/' . $data->image) }}" alt="{{ $data->image }}" class="img-preview img-fluid mb-4 col-sm-5 d-block">

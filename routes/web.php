@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PermintaanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,8 @@ Route::resource('akun', AkunController::class)
 ->middleware('checkRole:superadmin');
 
 Route::resource('barang', BarangController::class)
+->middleware('checkRole:admin,superadmin,user');
+Route::resource('permintaan', PermintaanController::class)
 ->middleware('checkRole:admin,superadmin,user');
 Route::post('/import', [BarangController::class, 'importData'])->name('importData.post');
 Route::get('/export', [BarangController::class, 'exportData'])->name('exportData');

@@ -1,7 +1,33 @@
 @extends('layouts.main')
 
 @section('container')
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+
+{{-- Inline CSS --}}
+<style>
+  .table-wrapper {
+    width: 100%; 
+    overflow-y: hidden; 
+    overflow-x: hidden;
+  }
+
+  .table-wrapper tbody td:nth-child(7) div {
+    width: 5rem;
+  }
+
+  @media (max-width: 992px) {
+    .table-wrapper {
+      overflow-x: scroll;
+    }
+  }
+
+  @media (max-width: 967px) {
+    .btn-header-wrapper {
+      display: block !important;
+    }
+  }
+</style>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 border-bottom">
   <h1 class="h2">Data Peminjaman</h1>
 </div>
 
@@ -16,18 +42,19 @@
 @endif
 
 <div class="table-responsive px-1">
-  <div class="d-flex justify-content-between align-items-center mb-3 mt-2">
+  <div class="d-flex justify-content-between align-items-center mb-3 mt-2 btn-header-wrapper">
     @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
       <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1 me-2">
         <span data-feather="plus-circle" class="mb-1 me-1"></span>
         Tambah
       </a>
-    @endif
-    <a href="{{ $final_url_ngrok }}" class="btn btn-primary ml-1 me-2">
+      <a href="{{ $final_url_ngrok }}" class="btn btn-primary mb-3 mt-3 me-5">
       <span data-feather="camera" class="mb-1 me-1"></span>
       Scan
     </a>
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+    @endif
+    
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center form-input-date">
       <div class="btn-toolbar">
         <div class="btn-group me-2">
           <input type="text" name="dates" class="btn btn-outline-success" />

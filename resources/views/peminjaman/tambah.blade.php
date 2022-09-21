@@ -20,7 +20,7 @@
             @csrf
             <div class="mb-3">
                 <label for="no_id" class="form-label">No ID</label>
-                <input id="no_id" type="text" class="form-control @error('no_id') is-invalid @enderror" name="no_id" required value="{{ old('no_id', auth()->user()->no_id ) }}">
+                <input id="no_id" type="text" class="form-control @error('no_id') is-invalid @enderror" name="no_id" autofocus required value="{{ old('no_id' ) }}">
                 @error('no_id')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -29,7 +29,7 @@
             </div>
             <div class="mb-3">
                 <label for="name_user" class="form-label">Nama User</label>
-                <input id="name_user" type="text" class="form-control @error('name_user') is-invalid @enderror" name="name_user" required value="{{ old('name_user', auth()->user()->name ) }}">
+                <input id="name_user" type="text" class="form-control @error('name_user') is-invalid @enderror" name="name_user" required value="{{ old('name_user' ) }}">
                 @error('name_user')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -43,7 +43,7 @@
             </div>
             <div class="mb-3">
                 <label for="kode_barang" class="mb-2">Kode Barang</label>
-                <input id="kode_barang" type="text" class="form-control @error('kode_barang') is-invalid @enderror" name="kode_barang" autofocus required value="{{ old('kode_barang') }}">
+                <input id="kode_barang" type="text" class="form-control @error('kode_barang') is-invalid @enderror" name="kode_barang" required value="{{ old('kode_barang') }}">
                 @error('kode_barang')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -68,6 +68,15 @@
                     </div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="tanggal_kembali" class="form-label">Tanggal Kembali</label>
+                <input id="tanggal_kembali" type="date" class="form-control @error('tanggal_kembali') is-invalid @enderror" name="tanggal_kembali" required value="{{ old('tanggal_kembali') }}">
+                @error('tanggal_kembali')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
             <button type="submit" class="btn btn-primary mb-5">Simpan</button>
         </form>
     </div>
@@ -84,6 +93,7 @@
                             <th>Kode Barang</th>
                             <th>Nama Barang</th>
                             <th>Jumlah</th>
+                            <th>Kondisi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,6 +103,7 @@
                             <td>{{ $item['kode_barang'] }}</td>
                             <td>{{ $item['name'] }}</td>
                             <td>{{ $item['jumlah'] }}</td>
+                            <td>{{ $item['kondisi'] }}</td>
                         </tr>
                         @endforeach
                     </tbody>
