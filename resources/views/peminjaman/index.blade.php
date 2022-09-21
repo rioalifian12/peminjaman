@@ -43,15 +43,17 @@
 
 <div class="table-responsive px-1">
   <div class="d-flex justify-content-between align-items-center mb-3 mt-2 btn-header-wrapper">
-    @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
+    @if(Auth::check() && (Auth::user()->role  == "superadmin"))
       <a href="{{ route ('peminjaman.create') }}" class="btn btn-primary ml-1 me-2">
         <span data-feather="plus-circle" class="mb-1 me-1"></span>
         Tambah
       </a>
+    @endif
+    @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
       <a href="{{ $final_url_ngrok }}" class="btn btn-primary mb-3 mt-3 me-5">
-      <span data-feather="camera" class="mb-1 me-1"></span>
-      Scan
-    </a>
+        <span data-feather="camera" class="mb-1 me-1"></span>
+        Scan
+      </a>
     @endif
     
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center form-input-date">
