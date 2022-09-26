@@ -12,6 +12,7 @@
         <div class="card-body">
           <div class="d-flex flex-row align-items-center justify-content-between mb-3">
             <div data-feather="users" class="align-text-bottom text-light mt-3" style="width: 3.5rem; height: 3.5rem;"></div>
+            <div class="fw-semibold fs-3 text-light mt-3">{{ $users }}</div>
             <div class="fw-semibold fs-5 text-light mt-3">Data User</div>
           </div>
         </div>
@@ -30,6 +31,7 @@
         <div class="card-body">
           <div class="d-flex flex-row align-items-center justify-content-between mb-3">
             <div data-feather="user" class="align-text-bottom mt-3" style="width: 3.5rem; height: 3.5rem;"></div>
+            <div class="fw-semibold fs-3 text-light mt-3">{{ $akuns }}</div>
             <div class="fw-semibold fs-5 mt-3">Data Akun</div>
           </div>
         </div>
@@ -48,6 +50,7 @@
         <div class="card-body">
           <div class="d-flex flex-row align-items-center justify-content-between mb-3">
             <div data-feather="box" class="align-text-bottom mt-3 text-light m-0" style="width: 3.5rem; height: 3.5rem;"></div>
+            <div class="fw-semibold fs-3 text-light mt-3">{{ $barangs }}</div>
             <div class="fw-semibold fs-5 text-light mt-3">Data Barang</div>
           </div>
         </div>
@@ -66,6 +69,7 @@
         <div class="card-body">
           <div class="d-flex flex-row align-items-center justify-content-between mb-3">
             <div data-feather="file-text" class="align-text-bottom mt-3" style="width: 3.5rem; height: 3.5rem;"></div>
+            <div class="fw-semibold fs-3 text-light mt-3">{{ $pinjams }}</div>
             <div class="fw-semibold fs-5 mt-3">Data Peminjaman</div>
           </div>
         </div>
@@ -88,6 +92,7 @@
         <div class="card-body">
           <div class="d-flex flex-row align-items-center justify-content-between mb-3">
             <div data-feather="box" class="align-text-bottom mt-3 text-light m-0" style="width: 3.5rem; height: 3.5rem;"></div>
+            <div class="fw-semibold fs-3 text-light mt-3">{{ $barangs }}</div>
             <div class="fw-bold text-light">Data Barang</div>
           </div>
         </div>
@@ -106,6 +111,7 @@
         <div class="card-body">
           <div class="d-flex flex-row align-items-center justify-content-between mb-3">
             <div data-feather="file-text" class="align-text-bottom mt-3" style="width: 3.5rem; height: 3.5rem;"></div>
+            <div class="fw-semibold fs-3 text-light mt-3">{{ $pinjams }}</div>
             <div class="fw-bold">Data Peminjaman</div>
           </div>
         </div>

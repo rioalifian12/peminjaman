@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Akun extends Model
+class Provinsi extends Model
 {
     use HasFactory;
-    protected $table = 'users';
+    protected $table = 'provinces';
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-        'is_active',
+        'prov_id',
+        'prov_name',
+        'locationid',
+        'status',
     ];
 }

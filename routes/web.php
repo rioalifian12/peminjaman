@@ -7,6 +7,7 @@ use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PermintaanController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::resource('user', UserController::class)
 ->middleware('checkRole:superadmin');
@@ -47,4 +48,24 @@ Route::get('/report/show_report_session', [PeminjamanController::class, 'show_re
 Route::get('/scan/peminjaman_by_kode_barang/{kode_barang}', [PeminjamanController::class, 'peminjaman_by_kode_barang'])->name('peminjaman_by_kode_barang');
 Route::get('/token', function () {
     return csrf_token(); 
+});
+
+Route::controller(PeminjamanController::class)->group(function(){
+    Route::get('/peminjaman', 'index');
+    Route::get('/autocomplete1', 'autocomplete1')->name('autocomplete1');
+    Route::get('/autocomplete2', 'autocomplete2')->name('autocomplete2');
+    Route::get('/autocomplete3', 'autocomplete3')->name('autocomplete3');
+    Route::get('/autocomplete4', 'autocomplete4')->name('autocomplete4');
+});
+
+Route::controller(PermintaanController::class)->group(function(){
+    Route::get('/permintaan', 'index');
+    Route::get('/autocomplete', 'autocomplete')->name('autocomplete');
+});
+
+Route::controller(UserController::class)->group(function(){
+    Route::get('/user', 'index');
+    Route::get('/autocomplete1', 'autocomplete1')->name('autocomplete1');
+    Route::get('/autocomplete2', 'autocomplete2')->name('autocomplete2');
+    Route::get('/autocomplete3', 'autocomplete3')->name('autocomplete3');
 });

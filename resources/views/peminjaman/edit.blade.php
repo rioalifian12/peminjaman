@@ -6,15 +6,22 @@
 </div>
 
 <div class="col-lg-7">
-    <form method="post" action="{{ route('peminjaman.update', $pinjams->id) }}" class="mb-5">
+    <form method="post" action="{{ route('peminjaman.update', $final_skema_pinjam['id_final']) }}" class="mb-5">
         @method('put') 
         @csrf
         <div class="mb-3">
             <label for="status" class="mb-2">Status</label>
             <select name="status" id="" class="form-select">
-                <option {{ old('status',$pinjams->status)=="bebas"? 'selected':'' }} value="bebas">Bebas</option>
+                <option {{ old('status',$final_skema_pinjam['status_final'])=="bebas"? 'selected':'' }} value="bebas">Bebas</option>
             </select>
         </div>
+        <div class="mb-3">
+          <label for="kondisi" class="mb-2">Kondisi Barang</label>
+          <select name="kondisi" id="" class="form-select">
+              <option {{ old('kondisi',$final_skema_barang['kondisi_final'])=="baik"? 'selected':'' }} value="baik">Baik</option>
+              <option {{ old('kondisi',$final_skema_barang['kondisi_final'])=="rusak"? 'selected':'' }} value="rusak">Rusak</option>
+          </select>
+      </div>
         <button type="submit" class="btn btn-primary mb-5">Simpan</button>
       </form>
 </div>

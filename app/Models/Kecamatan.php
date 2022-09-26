@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Akun extends Model
+class Kecamatan extends Model
 {
     use HasFactory;
-    protected $table = 'users';
+    protected $table = 'districts';
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-        'is_active',
+        'dis_id',
+        'dis_name',
+        'city_id',
     ];
 }

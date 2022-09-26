@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Provinsi;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,7 +19,6 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        $users = $users->except([1]);
         return view('user.index', compact('users'));
     }
 
@@ -45,7 +47,10 @@ class UserController extends Controller
             'password' => 'required|max:15',
             'jenis_kelamin' => 'required',
             'no_hp' => 'required|max:13',
-            'alamat' => 'required|max:50',
+            'provinsi' => 'required|max:50',
+            'kabupaten' => 'required|max:50',
+            'kecamatan' => 'required|max:50',
+            'role' => 'required',
         ]);
         
         $validatedData['password'] = Hash::make($validatedData['password']);
@@ -101,5 +106,32 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return redirect('/user')->with('success', 'Hapus user berhasil!');
+    }
+
+    public function autocomplete1(Request $request)
+    {
+        $data = Provinsi::select("prov_name as value", "prov_id")
+                    ->where('prov_name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
+
+    public function autocomplete2(Request $request)
+    {
+        $data = Kabupaten::select("city_name as value", "city_id")
+                    ->where('city_name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
+
+    public function autocomplete3(Request $request)
+    {
+        $data = Kecamatan::select("dis_name as value", "dis_id")
+                    ->where('dis_name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
     }
 }

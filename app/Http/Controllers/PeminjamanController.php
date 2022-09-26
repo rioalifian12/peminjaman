@@ -6,6 +6,7 @@ use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Barang;
+use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
@@ -170,18 +171,12 @@ class PeminjamanController extends Controller
         $final_barang = $barang->toArray();
         $final_barang = $final_barang[0];
         
-        //     [id] => 1
-        //     [kode_barang] => B1000
-        //     [name] => Printer Canon
-        //     [tipe] => Pixma iP2770
-        //     [tahun] => 2010
-        //     [jumlah] => 4
         $finalBarang_id = $final_barang->id;
         $finalBarang_kode_barang = $final_barang->kode_barang;
         $finalBarang_name = $final_barang->name;
         $finalBarang_tipe = $final_barang->tipe;
         $finalBarang_tahun = $final_barang->tahun;
-        $finalBarang_jumlah = $final_barang->jumlah;
+        $finalBarang_status = $final_barang->status;
         $finalBarang_kondisi = $final_barang->kondisi;
         $final_skema_barang = array(
             'finalBarang_id' => $finalBarang_id,
@@ -189,7 +184,7 @@ class PeminjamanController extends Controller
             'finalBarang_name' => $finalBarang_name,
             'finalBarang_tipe' => $finalBarang_tipe,
             'finalBarang_tahun' => $finalBarang_tahun,
-            'finalBarang_jumlah' => $finalBarang_jumlah,
+            'finalBarang_status' => $finalBarang_status,
             'finalBarang_kondisi' => $finalBarang_kondisi
         );
         
@@ -204,11 +199,11 @@ class PeminjamanController extends Controller
                 'tanggal_kembali' => 'required',
             ]);
 
-            // update jumlah barang
-            $final_update_jumlah_barang = $finalBarang_jumlah - 1;
+            // update status barang
+            $final_update_status = $finalBarang_status = 'dipinjam';
             DB::table('barangs')
                 ->where('id', $finalBarang_id)
-                ->update(['jumlah' => $final_update_jumlah_barang]);
+                ->update(['status' => $final_update_status]);
             
             Peminjaman::create($validatedData);
             return redirect('/peminjaman')->with('success', 'Tambah peminjaman berhasil!');
@@ -262,10 +257,44 @@ class PeminjamanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($kode_barang)
     {
-        $pinjams = Peminjaman::findOrFail($id);
-        return view('peminjaman.edit', compact('pinjams'));
+        $peminjamen = DB::table('peminjamen')
+                ->where('kode_barang', '=', $kode_barang)
+                ->get();
+        $final_peminjamen = $peminjamen->toArray();
+        $final_peminjamen = end($final_peminjamen);
+
+        $id_final = $final_peminjamen->id;
+        $kode_barang_final = $final_peminjamen->kode_barang;
+        $status_final = $final_peminjamen->status;
+        $final_skema_pinjam = array(
+            'id_final' => $id_final,
+            'kode_barang_final' => $kode_barang_final,
+            'status_final' => $status_final
+        );
+
+        $barangs = DB::table('barangs')
+                ->where('kode_barang', '=', $kode_barang)
+                ->take(1)
+                ->get();
+        $final_barangs = $barangs->toArray();
+        $final_barangs = $final_barangs[0];
+
+        $id_final = $final_barangs->id;
+        $kondisi_final = $final_barangs->kondisi;
+        $final_skema_barang = array(
+            'id_final' => $id_final,
+            'kondisi_final' => $kondisi_final
+        );
+
+        // echo "<pre>";
+        // print_r($final_skema_pinjam);
+        // exit();
+
+        return view('peminjaman.edit')
+            ->with(compact('final_skema_pinjam'))
+            ->with(compact('final_skema_barang'));
     }
 
     /**
@@ -295,20 +324,25 @@ class PeminjamanController extends Controller
         $final_barang = $final_barang[0];
         
         $finalBarang_id = $final_barang->id;
-        $finalBarang_jumlah = $final_barang->jumlah;
+        $finalBarang_status = $final_barang->status;
         $final_skema_barang = array(
             'finalBarang_id' => $finalBarang_id,
-            'finalBarang_jumlah' => $finalBarang_jumlah
+            'finalBarang_status' => $finalBarang_status
         );
         // echo "<pre>";
         // print_r($final_barang);
         // exit();
 
-        // update jumlah barang
-        $final_update_jumlah_barang = $finalBarang_jumlah + 1;
+        // update status barang
+        $final_update_status = $finalBarang_status = 'tersedia';
         DB::table('barangs')
             ->where('id', $finalBarang_id)
-            ->update(['jumlah' => $final_update_jumlah_barang]);
+            ->update(['status' => $final_update_status]);
+
+        $barang = Barang::find($kode_barang);
+        $barang = Barang::where('kode_barang',$kode_barang)->first();
+        $barang->kondisi = $request->input('kondisi');
+        $barang->save();
 
         $pinjams = Peminjaman::findOrFail($id);
         $pinjams->update($request->all());
@@ -326,5 +360,98 @@ class PeminjamanController extends Controller
         $pinjams = Peminjaman::findOrFail($id);
         $pinjams->delete();
         return redirect('/peminjaman')->with('success', 'Hapus peminjaman berhasil!');
+    }
+
+    public function peminjaman_by_kode_barang($kode_barang)
+    {
+        $peminjamen = DB::table('peminjamen')
+                ->where('kode_barang', '=', $kode_barang)
+                ->get();
+        $final_peminjamen = $peminjamen->toArray();
+        $final_peminjamen = end($final_peminjamen);
+
+        $barangs = DB::table('barangs')
+                ->where('kode_barang', '=', $kode_barang)
+                ->take(1)
+                ->get();
+        $final_barangs = $barangs->toArray();
+        $final_barangs = $final_barangs[0];
+
+        $id_final = $final_barangs->id;
+        $kode_barang_final = $final_barangs->kode_barang;
+        $name_final = $final_barangs->name;
+        $tipe_final = $final_barangs->tipe;
+        $tahun_final = $final_barangs->tahun;
+        $status_final_pinjam = $final_barangs->status;
+        $image_final = $final_barangs->image;
+        $final_skema_barang = array(
+            'id_final' => $id_final,
+            'kode_barang_final' => $kode_barang_final,
+            'name_final' => $name_final,
+            'tipe_final' => $tipe_final,
+            'tahun_final' => $tahun_final,
+            'status_final_pinjam' => $status_final_pinjam,
+            'image_final' => $image_final
+        );
+        
+        if ($status_final_pinjam == 'tersedia') {
+            return view('barang.show', compact('final_skema_barang'));
+        } else {
+            $id_final = $final_peminjamen->id;
+            $no_id_final = $final_peminjamen->no_id;
+            $name_user_final = $final_peminjamen->name_user;
+            $kode_barang_final = $final_peminjamen->kode_barang;
+            $name_barang_final = $final_peminjamen->name_barang;
+            $tanggal_pinjam_final = $final_peminjamen->tanggal_pinjam;
+            $tanggal_kembali_final = $final_peminjamen->tanggal_kembali;
+            $status_final = $final_peminjamen->status;
+            $final_skema_pinjam = array(
+                'id_final' => $id_final,
+                'no_id_final' => $no_id_final,
+                'name_user_final' => $name_user_final,
+                'kode_barang_final' => $kode_barang_final,
+                'name_barang_final' => $name_barang_final,
+                'tanggal_pinjam_final' => $tanggal_pinjam_final,
+                'tanggal_kembali_final' => $tanggal_kembali_final,
+                'status_final' => $status_final
+            );
+            return view('peminjaman.show', compact('final_skema_pinjam'));
+        }
+    }
+
+    public function autocomplete1(Request $request)
+    {
+        $data = User::select("no_id as value", "id")
+                    ->where('no_id', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
+
+    public function autocomplete2(Request $request)
+    {
+        $data = User::select("name as value", "id")
+                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
+
+    public function autocomplete3(Request $request)
+    {
+        $data = Barang::select("kode_barang as value", "id")
+                    ->where('kode_barang', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
+
+    public function autocomplete4(Request $request)
+    {
+        $data = Barang::select("name as value", "id")
+                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
     }
 }

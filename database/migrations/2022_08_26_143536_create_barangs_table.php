@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('tipe')->nullable();
             $table->string('tahun')->nullable();
-            $table->string('jumlah')->nullable();
+            $table->enum('status', ['tersedia', 'dipinjam'])->default('tersedia');
             $table->string('image')->nullable();
             $table->enum('kondisi', ['baik', 'rusak'])->default('baik');
             $table->timestamps();

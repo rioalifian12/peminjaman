@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Akun;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AkunController extends Controller
 {
@@ -15,7 +16,6 @@ class AkunController extends Controller
     public function index()
     {
         $akuns = Akun::all();
-        $akuns = $akuns->except([1]);
         return view('akun.index', compact('akuns'));
     }
 
@@ -72,8 +72,18 @@ class AkunController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+            'email' => 'required|max:40',
+            'password' => 'required',
+            'role' => 'required',
+            'is_active' => 'required',
+        ]);
+        
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
         $akun = Akun::findOrFail($id);
-        $akun->update($request->all());
+        Akun::where('id', $akun->id)
+            ->update($validatedData);
         return redirect('/akun')->with('success', 'Edit akun berhasil!');
     }
 

@@ -36,14 +36,14 @@
         <td>{{ $user->name }}</td>
         <td>{{ $user->jenis_kelamin }}</td>
         <td>{{ $user->no_hp }}</td>
-        <td>{{ $user->alamat }}</td>
+        <td>{{ $user->provinsi }}, {{ $user->kabupaten }}, {{ $user->kecamatan }}</td>
         <td>
           <a href="{{ route('user.edit', $user->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
           <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline">
             @csrf
             <input type="hidden" name="_method" value="DELETE">
             <button type="submit" class="badge bg-danger border-0" onclick="return confirm('Apakah anda yakin?')"><span data-feather="x-circle" class="align-text-bottom"></span></button>
-        </form>
+          </form>
         </td>
       </tr>    
       @endforeach

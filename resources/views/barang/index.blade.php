@@ -85,7 +85,7 @@
           <th scope="col">Nama</th>
           <th scope="col">Tipe</th>
           <th scope="col">Tahun</th>
-          <th scope="col">Jumlah</th>
+          <th scope="col">Status</th>
           @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
           <th scope="col">Kondisi</th>
           <th scope="col">QR-Code</th>
@@ -97,16 +97,16 @@
         @if(!empty($datas) && $datas->count())
         <?php $baseUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'; ?>
           @foreach($datas as $data)
-          @if ($data->jumlah == 1)
-            <?php $url_scan = $baseUrl.'barang/'. $data->kode_barang ?>
-          @else
-            <?php $url_scan = $baseUrl.'peminjaman/'. $data->kode_barang ?>
-          @endif
+          <?php $url_scan = $baseUrl.'scan/peminjaman_by_kode_barang/'. $data->kode_barang ?>
             <tr>
               <td>{{ $loop->iteration }}</td>
               <td>
                 <a href="{{ route('barang.show', $data->kode_barang) }}">
-                  <img src="{{ asset('storage/' . $data->image) }}" alt="{{ $data->image }}" style="max-height: 100px; overflow:hidden">
+                  @if ($data->image)
+                    <img src="{{ asset('storage/' . $data->image) }}" alt="{{ $data->name }}" style="max-height: 100px; overflow:hidden">
+                  @else
+                    <img src="storage\post-image\image.png" style="max-height: 100px; overflow:hidden">
+                  @endif
                 </a>
               </td>
               @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
@@ -115,7 +115,7 @@
               <td>{{ $data->name }}</td>
               <td>{{ $data->tipe }}</td>
               <td>{{ $data->tahun }}</td>
-              <td>{{ $data->jumlah }}</td>
+              <td>{{ $data->status }}</td>
               @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
               <td>{{ $data->kondisi }}</td>
               <td><img src="data:image/png;base64,{{ DNS2D::getBarcodePNG($url_scan,'QRCODE') }}" style="max-height: 100px; overflow:hidden" /></td>

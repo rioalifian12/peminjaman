@@ -25,7 +25,12 @@ class User extends Authenticatable
         'password',
         'jenis_kelamin',
         'no_hp',
-        'alamat',
+        'provinsi',
+        'kabupaten',
+        'kecamatan',
+        'desa',
+        'role',
+        'is_active',
     ];
 
     /**

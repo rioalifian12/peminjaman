@@ -31,9 +31,11 @@
             <td>{{ $final_skema_pinjam['tanggal_kembali_final'] }}</td>
           </tr>
         </table>
-        <a href="{{ route('peminjaman.edit', $final_skema_pinjam['id_final']) }}" class="btn btn-success">
+        @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
+        <a href="{{ route('peminjaman.edit', $final_skema_pinjam['kode_barang_final']) }}" class="btn btn-success">
           <span data-feather="edit"></span> Pengembalian
         </a>
+        @endif
         </div>
       </div>
     </div>

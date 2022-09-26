@@ -22,8 +22,12 @@ return new class extends Migration
             $table->string('password');
             $table->enum('jenis_kelamin', ['pria', 'wanita'])->nullable();
             $table->string('no_hp')->nullable();
-            $table->string('alamat')->nullable();
+            $table->string('provinsi')->nullable();
+            $table->string('kabupaten')->nullable();
+            $table->string('kecamatan')->nullable();
+            $table->string('desa')->nullable();
             $table->enum('role', ['superadmin', 'admin', 'user'])->default('user');
+            $table->enum('is_active', ['aktif', 'tidak'])->default('aktif');
             $table->rememberToken();
             $table->timestamps();
         });

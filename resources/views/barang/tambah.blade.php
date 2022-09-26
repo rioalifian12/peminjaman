@@ -45,13 +45,11 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="jumlah" class="form-label">Jumlah</label>
-            <input id="jumlah" type="number" class="form-control @error('jumlah') is-invalid @enderror" name="jumlah" value="{{ old('jumlah') }}">
-            @error('jumlah')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+            <label for="status" class="mb-2">Status</label>
+            <select name="status" class="form-select">
+                <option value="tersedia">Tersedia</option>
+                <option value="dipinjam">Dipinjam</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Image</label>

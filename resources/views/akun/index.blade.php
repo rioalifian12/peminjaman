@@ -20,6 +20,7 @@
         <th scope="col">Email</th>
         <th scope="col">Password</th>
         <th scope="col">Role</th>
+        <th scope="col">Status</th>
         <th scope="col">Aksi</th>
       </tr>
     </thead>
@@ -31,6 +32,7 @@
         <td>{{ $akun->email }}</td>
         <td>{{ $akun->password }}</td>
         <td>{{ $akun->role }}</td>
+        <td>{{ $akun->is_active }}</td>
         <td>
           <a href="{{ route('akun.edit', $akun->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
           <form action="{{ route('akun.destroy', $akun->id) }}" method="POST" class="d-inline">

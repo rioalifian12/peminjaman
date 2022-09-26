@@ -97,7 +97,7 @@
           @if ($pinjam->status == 'bebas')
               -
           @else
-            <a href="{{ route('peminjaman.edit', $pinjam->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
+            <a href="{{ route('peminjaman.edit', $pinjam->kode_barang) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
           @endif
         </td>
         @endif

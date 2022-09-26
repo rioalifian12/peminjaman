@@ -43,7 +43,7 @@
             </div>
             <div class="mb-3">
                 <label for="name_barang" class="mb-2">Nama Barang</label>
-                <input id="name_barang" type="text" class="form-control @error('name_barang') is-invalid @enderror" name="name_barang" autofocus required value="{{ old('name_barang') }}">
+                <input id="name_barang" type="text" class="typeahead form-control @error('name_barang') is-invalid @enderror" name="name_barang" autofocus required value="{{ old('name_barang') }}">
                 @error('name_barang')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -64,14 +64,16 @@
                         <tr>
                             <th>Nama Barang</th>
                             <th>Tipe</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($barang as $item)
-                        @if ($item->kondisi == 'baik' && $item->jumlah >= 1)
+                        @if ($item->kondisi == 'baik' && $item->status == 'tersedia')
                             <tr>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->tipe }}</td>
+                                <td>{{ $item->status }}</td>
                             </tr>
                         @endif
                         
@@ -84,8 +86,31 @@
 </div>
 <script type="text/javascript"></script>
     <script>
-     $(document).ready( function () {
-      $('#tabel').DataTable();
-  } );
+    var path = "{{ route('autocomplete') }}";
+
+    $(document).ready( function () {
+        $('#tabel').DataTable();
+    });
+
+    $( "#name_barang" ).autocomplete({
+        source: function( request, response ) {
+        $.ajax({
+            url: path,
+            type: 'GET',
+            dataType: "json",
+            data: {
+            search: request.term
+            },
+            success: function( data ) {
+            response( data );
+            }
+        });
+        },
+        select: function (event, ui) {
+        $('#name_barang').val(ui.item.label);
+        console.log(ui.item); 
+        return false;
+        }
+    });
   </script>
 @endsection

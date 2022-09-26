@@ -14,7 +14,7 @@ class Barang extends Model
         'name',
         'tipe',
         'tahun',
-        'jumlah',
+        'status',
         'image',
         'kondisi',
     ];

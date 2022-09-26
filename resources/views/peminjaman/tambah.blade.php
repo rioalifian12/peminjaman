@@ -20,7 +20,7 @@
             @csrf
             <div class="mb-3">
                 <label for="no_id" class="form-label">No ID</label>
-                <input id="no_id" type="text" class="form-control @error('no_id') is-invalid @enderror" name="no_id" autofocus required value="{{ old('no_id' ) }}">
+                <input id="no_id" type="text" class="typeahead form-control @error('no_id') is-invalid @enderror" name="no_id" autofocus required value="{{ old('no_id' ) }}">
                 @error('no_id')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -29,12 +29,13 @@
             </div>
             <div class="mb-3">
                 <label for="name_user" class="form-label">Nama User</label>
-                <input id="name_user" type="text" class="form-control @error('name_user') is-invalid @enderror" name="name_user" required value="{{ old('name_user' ) }}">
+                <input id="name_user" type="text" class="typeahead form-control @error('name_user') is-invalid @enderror" name="name_user" required value="{{ old('name_user' ) }}">
                 @error('name_user')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
+                {{ csrf_field() }}
             </div>
             <div class="mb-3">
                 <div class="col-6">
@@ -92,7 +93,7 @@
                             <th>#</th>
                             <th>Kode Barang</th>
                             <th>Nama Barang</th>
-                            <th>Jumlah</th>
+                            <th>Status</th>
                             <th>Kondisi</th>
                         </tr>
                     </thead>
@@ -102,7 +103,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item['kode_barang'] }}</td>
                             <td>{{ $item['name'] }}</td>
-                            <td>{{ $item['jumlah'] }}</td>
+                            <td>{{ $item['status'] }}</td>
                             <td>{{ $item['kondisi'] }}</td>
                         </tr>
                         @endforeach
@@ -114,8 +115,97 @@
 </div>
 <script type="text/javascript"></script>
     <script>
-     $(document).ready( function () {
-      $('#tabel').DataTable();
-  } );
+    var noid = "{{ route('autocomplete1') }}";
+    var user = "{{ route('autocomplete2') }}";
+    var kode = "{{ route('autocomplete3') }}";
+    var barang = "{{ route('autocomplete4') }}";
+
+    $(document).ready( function () {
+        $('#tabel').DataTable();
+    });
+  
+    $( "#no_id" ).autocomplete({
+        source: function( request, response ) {
+          $.ajax({
+            url: noid,
+            type: 'GET',
+            dataType: "json",
+            data: {
+               search: request.term
+            },
+            success: function( data ) {
+               response( data );
+            }
+          });
+        },
+        select: function (event, ui) {
+           $('#no_id').val(ui.item.label);
+           console.log(ui.item); 
+           return false;
+        }
+    });
+
+    $( "#name_user" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax({
+        url: user,
+        type: 'GET',
+        dataType: "json",
+        data: {
+            search: request.term
+        },
+        success: function( data ) {
+            response( data );
+        }
+        });
+    },
+    select: function (event, ui) {
+        $('#name_user').val(ui.item.label);
+        console.log(ui.item); 
+        return false;
+    }
+    });
+
+    $( "#kode_barang" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax({
+        url: kode,
+        type: 'GET',
+        dataType: "json",
+        data: {
+            search: request.term
+        },
+        success: function( data ) {
+            response( data );
+        }
+        });
+    },
+    select: function (event, ui) {
+        $('#kode_barang').val(ui.item.label);
+        console.log(ui.item); 
+        return false;
+    }
+    });
+
+    $( "#name_barang" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax({
+        url: barang,
+        type: 'GET',
+        dataType: "json",
+        data: {
+            search: request.term
+        },
+        success: function( data ) {
+            response( data );
+        }
+        });
+    },
+    select: function (event, ui) {
+        $('#name_barang').val(ui.item.label);
+        console.log(ui.item); 
+        return false;
+    }
+    });
   </script>
 @endsection

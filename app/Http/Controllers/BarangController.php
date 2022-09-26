@@ -50,7 +50,7 @@ class BarangController extends Controller
                     'name' => $sheet->getCell( 'B' . $row )->getValue(),
                     'tipe' => $sheet->getCell( 'C' . $row )->getValue(),
                     'tahun' => $sheet->getCell( 'D' . $row )->getValue(),
-                    'jumlah' => $sheet->getCell( 'E' . $row )->getValue(),
+                    'status' => $sheet->getCell( 'E' . $row )->getValue(),
                     'kondisi' =>$sheet->getCell( 'F' . $row )->getValue(),
                 ];
                 $startcount++;
@@ -86,7 +86,7 @@ class BarangController extends Controller
     
     function exportData(){
         $data = DB::table('barangs')->orderBy('id', 'DESC')->get();
-        $data_array [] = array("kode_barang","name","tipe","tahun","jumlah","image","kondisi");
+        $data_array [] = array("kode_barang","name","tipe","tahun","status","kondisi");
         foreach($data as $data_item)
         {
 
@@ -95,8 +95,7 @@ class BarangController extends Controller
                 'name' => $data_item->name,
                 'tipe' => $data_item->tipe,
                 'tahun' => $data_item->tahun,
-                'jumlah' => $data_item->jumlah,
-                'image' => $data_item->image,
+                'status' => $data_item->status,
                 'kondisi' => $data_item->kondisi
             );
         }
@@ -126,7 +125,7 @@ class BarangController extends Controller
             'name' => 'required|max:15',
             'tipe' => 'required|max:30',
             'tahun' => 'required|max:4',
-            'jumlah' => 'required|max:3',
+            'status' => 'required',
             'image' => 'image|file|max:1024'
         ]);
 
@@ -158,6 +157,7 @@ class BarangController extends Controller
         $name_final = $final_barangs->name;
         $tipe_final = $final_barangs->tipe;
         $tahun_final = $final_barangs->tahun;
+        $status_final_pinjam = $final_barangs->status;
         $image_final = $final_barangs->image;
         $final_skema_barang = array(
             'id_final' => $id_final,
@@ -165,6 +165,7 @@ class BarangController extends Controller
             'name_final' => $name_final,
             'tipe_final' => $tipe_final,
             'tahun_final' => $tahun_final,
+            'status_final_pinjam' => $status_final_pinjam,
             'image_final' => $image_final
         );
         // echo "<pre>";
@@ -201,7 +202,7 @@ class BarangController extends Controller
             'name' => 'required|max:15',
             'tipe' => 'required|max:30',
             'tahun' => 'required|max:4',
-            'jumlah' => 'required|max:3',
+            'status' => 'required',
             'image' => 'image|file|max:1024',
             'kondisi' => 'required'
         ]);

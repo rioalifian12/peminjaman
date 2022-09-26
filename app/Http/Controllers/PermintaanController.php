@@ -129,4 +129,13 @@ class PermintaanController extends Controller
         $datas->delete();
         return redirect('/permintaan')->with('success', 'Hapus peminjaman berhasil!');
     }
+
+    public function autocomplete(Request $request)
+    {
+        $data = Barang::select("name as value", "id")
+                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
 }
