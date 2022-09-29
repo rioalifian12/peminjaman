@@ -115,10 +115,10 @@
 </div>
 <script type="text/javascript"></script>
     <script>
-    var noid = "{{ route('autocomplete1') }}";
-    var user = "{{ route('autocomplete2') }}";
-    var kode = "{{ route('autocomplete3') }}";
-    var barang = "{{ route('autocomplete4') }}";
+    var noid = "{{ route('autocomplete11') }}";
+    var user = "{{ route('autocomplete12') }}";
+    var kode = "{{ route('autocomplete13') }}";
+    var barang = "{{ route('autocomplete14') }}";
 
     $(document).ready( function () {
         $('#tabel').DataTable();

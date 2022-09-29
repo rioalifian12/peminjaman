@@ -419,7 +419,7 @@ class PeminjamanController extends Controller
         }
     }
 
-    public function autocomplete1(Request $request)
+    public function autocomplete11(Request $request)
     {
         $data = User::select("no_id as value", "id")
                     ->where('no_id', 'LIKE', '%'. $request->get('search'). '%')
@@ -428,7 +428,7 @@ class PeminjamanController extends Controller
         return response()->json($data);
     }
 
-    public function autocomplete2(Request $request)
+    public function autocomplete12(Request $request)
     {
         $data = User::select("name as value", "id")
                     ->where('name', 'LIKE', '%'. $request->get('search'). '%')
@@ -437,7 +437,7 @@ class PeminjamanController extends Controller
         return response()->json($data);
     }
 
-    public function autocomplete3(Request $request)
+    public function autocomplete13(Request $request)
     {
         $data = Barang::select("kode_barang as value", "id")
                     ->where('kode_barang', 'LIKE', '%'. $request->get('search'). '%')
@@ -446,7 +446,7 @@ class PeminjamanController extends Controller
         return response()->json($data);
     }
 
-    public function autocomplete4(Request $request)
+    public function autocomplete14(Request $request)
     {
         $data = Barang::select("name as value", "id")
                     ->where('name', 'LIKE', '%'. $request->get('search'). '%')

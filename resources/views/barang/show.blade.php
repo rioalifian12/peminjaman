@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row my-3">
       <div class="col-lg-8 mb-3">
-        <div style="max-height: 600px; overflow:hidden">
+        <div class="text-center" style="max-height: 600px; overflow:hidden">
           @if ($final_skema_barang['image_final'])
             <img src="{{ asset('storage/' . $final_skema_barang['image_final']) }}" alt="{{ $final_skema_barang['name_final'] }}" style="max-height: 200px; overflow:hidden">
           @else

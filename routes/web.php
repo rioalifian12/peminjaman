@@ -52,10 +52,10 @@ Route::get('/token', function () {
 
 Route::controller(PeminjamanController::class)->group(function(){
     Route::get('/peminjaman', 'index');
-    Route::get('/autocomplete1', 'autocomplete1')->name('autocomplete1');
-    Route::get('/autocomplete2', 'autocomplete2')->name('autocomplete2');
-    Route::get('/autocomplete3', 'autocomplete3')->name('autocomplete3');
-    Route::get('/autocomplete4', 'autocomplete4')->name('autocomplete4');
+    Route::get('/autocomplete11', 'autocomplete11')->name('autocomplete11');
+    Route::get('/autocomplete12', 'autocomplete12')->name('autocomplete12');
+    Route::get('/autocomplete13', 'autocomplete13')->name('autocomplete13');
+    Route::get('/autocomplete14', 'autocomplete14')->name('autocomplete14');
 });
 
 Route::controller(PermintaanController::class)->group(function(){

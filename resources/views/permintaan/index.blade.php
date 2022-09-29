@@ -43,12 +43,10 @@
 
 <div class="table-responsive px-1">
   <div class="d-flex justify-content-between align-items-center mb-3 mt-2 btn-header-wrapper">
-    @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "user"))
       <a href="{{ route ('permintaan.create') }}" class="btn btn-primary ml-1 me-2">
         <span data-feather="plus-circle" class="mb-1 me-1"></span>
         Tambah
       </a>
-    @endif
   </div>
   <table class="table table-striped table-sm" id="peminjamen">
     <thead>

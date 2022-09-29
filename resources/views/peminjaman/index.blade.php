@@ -49,12 +49,10 @@
         Tambah
       </a>
     @endif
-    @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
       <a href="{{ $final_url_ngrok }}" class="btn btn-primary mb-3 mt-3 me-5">
         <span data-feather="camera" class="mb-1 me-1"></span>
         Scan
       </a>
-    @endif
     
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center form-input-date">
       <div class="btn-toolbar">
