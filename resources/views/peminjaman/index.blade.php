@@ -97,6 +97,8 @@
           @else
             <a href="{{ route('peminjaman.edit', $pinjam->kode_barang) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
           @endif
+          <a href="{{ route('report', $pinjam->id) }}" class="badge bg-success" target="_blank"><span data-feather="printer" class="align-text-bottom"></span></a>
+          {{-- <a href="{{ route('report', $pinjam->id) }}" class="badge bg-success"><span data-feather="printer" class="align-text-bottom"></span></a> --}}
         </td>
         @endif
       </tr>    

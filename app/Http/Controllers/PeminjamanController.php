@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class PeminjamanController extends Controller
 {
@@ -453,5 +454,14 @@ class PeminjamanController extends Controller
                     ->get();
     
         return response()->json($data);
+    }
+
+    public function report(Barang $barang, $id)
+    {
+        $pinjam = DB::table('peminjamen')->first();
+        $pinjam = Peminjaman::findOrFail($id);
+        // return view('peminjaman.report', compact('pinjam'));
+        $pdf = PDF::loadview('peminjaman.report',['pinjam'=>$pinjam]);
+	    return $pdf->stream();
     }
 }

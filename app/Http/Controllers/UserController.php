@@ -134,4 +134,31 @@ class UserController extends Controller
     
         return response()->json($data);
     }
+
+    public function autocomplete4(Request $request)
+    {
+        $data = Provinsi::select("prov_name as value", "prov_id")
+                    ->where('prov_name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
+
+    public function autocomplete5(Request $request)
+    {
+        $data = Kabupaten::select("city_name as value", "city_id")
+                    ->where('city_name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
+
+    public function autocomplete6(Request $request)
+    {
+        $data = Kecamatan::select("dis_name as value", "dis_id")
+                    ->where('dis_name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
 }

@@ -68,4 +68,9 @@ Route::controller(UserController::class)->group(function(){
     Route::get('/autocomplete1', 'autocomplete1')->name('autocomplete1');
     Route::get('/autocomplete2', 'autocomplete2')->name('autocomplete2');
     Route::get('/autocomplete3', 'autocomplete3')->name('autocomplete3');
+    Route::get('/autocomplete4', 'autocomplete4')->name('autocomplete4');
+    Route::get('/autocomplete5', 'autocomplete5')->name('autocomplete5');
+    Route::get('/autocomplete6', 'autocomplete6')->name('autocomplete6');
 });
+
+Route::get('/report/{id}', [PeminjamanController::class, 'report'])->name('report');

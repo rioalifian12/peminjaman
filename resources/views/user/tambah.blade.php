@@ -176,10 +176,9 @@
     password.onchange = validatePassword;
     confirm_password.onkeyup = validatePassword;
 
-    var prov = "{{ route('autocomplete1') }}";
-    var kab = "{{ route('autocomplete2') }}";
-    var kec = "{{ route('autocomplete3') }}";
-    var des = "{{ route('autocomplete4') }}";
+    var prov = "{{ route('autocomplete4') }}";
+    var kab = "{{ route('autocomplete5') }}";
+    var kec = "{{ route('autocomplete6') }}";
   
     $( "#provinsi" ).autocomplete({
         source: function( request, response ) {

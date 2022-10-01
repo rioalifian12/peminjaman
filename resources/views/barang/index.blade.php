@@ -78,7 +78,7 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Image</th>
+          <th scope="col" style="text-align: center">Image</th>
           @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
           <th scope="col">Kode Barang</th>
           @endif
@@ -100,7 +100,7 @@
           <?php $url_scan = $baseUrl.'scan/peminjaman_by_kode_barang/'. $data->kode_barang ?>
             <tr>
               <td>{{ $loop->iteration }}</td>
-              <td>
+              <td style="text-align: center">
                 <a href="{{ route('barang.show', $data->kode_barang) }}">
                   @if ($data->image)
                     <img src="{{ asset('storage/' . $data->image) }}" alt="{{ $data->name }}" style="max-height: 100px; overflow:hidden">

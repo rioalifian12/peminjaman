@@ -90,7 +90,6 @@
                 <table class="table" id="tabel">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Kode Barang</th>
                             <th>Nama Barang</th>
                             <th>Status</th>
@@ -100,11 +99,12 @@
                     <tbody>
                         @foreach ($barang as $item)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            @if ($item->kondisi == 'baik' && $item->status == 'tersedia')
                             <td>{{ $item['kode_barang'] }}</td>
                             <td>{{ $item['name'] }}</td>
                             <td>{{ $item['status'] }}</td>
                             <td>{{ $item['kondisi'] }}</td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
