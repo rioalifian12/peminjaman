@@ -69,7 +69,12 @@
         <td>{{ $data->name_user }}</td>
         <td>{{ $data->name_barang }}</td>
         <td>{{ $data->status }}</td>
-        @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
+        @if(Auth::check() && Auth::user()->role  == "superadmin")
+        <td>
+            <a href="{{ route('permintaan.edit', $data->id) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
+        </td>
+        @endif
+        @if(Auth::check() && Auth::user()->role  == "admin")
         <td>
           @if ($data->status == 'ditolak' || $data->status == 'diterima')
           -

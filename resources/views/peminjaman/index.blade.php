@@ -69,6 +69,7 @@
     <thead>
       <tr>
         <th scope="col">#</th>
+        <th scope="col">No ID</th>
         <th scope="col">Nama User</th>
         <th scope="col">Kode Barang</th>
         <th scope="col">Nama Barang</th>
@@ -84,21 +85,27 @@
       @foreach ($pinjams as $pinjam)
       <tr>
         <td>{{ $loop->iteration }}</td>
+        <td>{{ $pinjam->no_id }}</td>
         <td>{{ $pinjam->name_user }}</td>
         <td>{{ $pinjam->kode_barang }}</td>
         <td>{{ $pinjam->name_barang }}</td>
         <td>{{ $pinjam->tanggal_pinjam }}</td>
         <td>{{ $pinjam->tanggal_kembali }}</td>
         <td>{{ $pinjam->status }}</td>
-        @if(Auth::check() && (Auth::user()->role  == "superadmin" || Auth::user()->role  == "admin"))
+        @if(Auth::check() && Auth::user()->role  == "superadmin")
+        <td>
+          <a href="{{ route('peminjaman.edit', $pinjam->kode_barang) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
+          <a href="{{ route('report', $pinjam->id) }}" class="badge bg-success" target="_blank"><span data-feather="printer" class="align-text-bottom"></span></a>
+        </td>
+        @endif
+        @if(Auth::check() && Auth::user()->role  == "admin")
         <td>
           @if ($pinjam->status == 'bebas')
               -
           @else
             <a href="{{ route('peminjaman.edit', $pinjam->kode_barang) }}" class="badge bg-warning"><span data-feather="edit" class="align-text-bottom"></span></a>
-          @endif
-          <a href="{{ route('report', $pinjam->id) }}" class="badge bg-success" target="_blank"><span data-feather="printer" class="align-text-bottom"></span></a>
-          {{-- <a href="{{ route('report', $pinjam->id) }}" class="badge bg-success"><span data-feather="printer" class="align-text-bottom"></span></a> --}}
+            <a href="{{ route('report', $pinjam->id) }}" class="badge bg-success" target="_blank"><span data-feather="printer" class="align-text-bottom"></span></a>
+            @endif
         </td>
         @endif
       </tr>    

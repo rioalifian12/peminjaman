@@ -130,8 +130,8 @@
 
         <table style="font-family: serif">
             <tr>
-                <td style="padding-left: 90px">Pihak Pertama<br><br><br><br><br><p style="text-align: center">{{ auth()->user()->name }}</p></td>
-                <td style="padding-left: 320px">Pihak Kedua<br><br><br><br><br><p style="text-align: center">{{ $pinjam->name_user }}</p></td>
+                <td style="padding-left: 90px">Pihak Pertama<br><br><br><br><br><p>{{ auth()->user()->name }}</p></td>
+                <td style="padding-left: 320px">Pihak Kedua<br><br><br><br><br><p>{{ $pinjam->name_user }}</p></td>
             </tr>
         </table>
     </main>

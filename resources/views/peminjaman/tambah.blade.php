@@ -19,17 +19,8 @@
         <form method="post" action="/peminjaman" class="mb-5">
             @csrf
             <div class="mb-3">
-                <label for="no_id" class="form-label">No ID</label>
-                <input id="no_id" type="text" class="typeahead form-control @error('no_id') is-invalid @enderror" name="no_id" autofocus required value="{{ old('no_id' ) }}">
-                @error('no_id')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
-            </div>
-            <div class="mb-3">
                 <label for="name_user" class="form-label">Nama User</label>
-                <input id="name_user" type="text" class="typeahead form-control @error('name_user') is-invalid @enderror" name="name_user" required value="{{ old('name_user' ) }}">
+                <input id="name_user" type="text" class="typeahead form-control @error('name_user') is-invalid @enderror" name="name_user" autofocus required value="{{ old('name_user' ) }}">
                 @error('name_user')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -38,23 +29,32 @@
                 {{ csrf_field() }}
             </div>
             <div class="mb-3">
-                <div class="col-6">
-                    <div id="reader" width="600px"></div>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="kode_barang" class="mb-2">Kode Barang</label>
-                <input id="kode_barang" type="text" class="form-control @error('kode_barang') is-invalid @enderror" name="kode_barang" required value="{{ old('kode_barang') }}">
-                @error('kode_barang')
+                <label for="no_id" class="form-label">No ID</label>
+                <input id="no_id" type="text" class="typeahead form-control @error('no_id') is-invalid @enderror" name="no_id" required value="{{ old('no_id' ) }}">
+                @error('no_id')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
             </div>
             <div class="mb-3">
+                <div class="col-6">
+                    <div id="reader" width="600px"></div>
+                </div>
+            </div>
+            <div class="mb-3">
                 <label for="name_barang" class="mb-2">Nama Barang</label>
                 <input id="name_barang" type="text" class="form-control @error('name_barang') is-invalid @enderror" name="name_barang" required value="{{ old('name_barang') }}">
                 @error('name_barang')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="kode_barang" class="mb-2">Kode Barang</label>
+                <input id="kode_barang" type="text" class="form-control @error('kode_barang') is-invalid @enderror" name="kode_barang" required value="{{ old('kode_barang') }}">
+                @error('kode_barang')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
